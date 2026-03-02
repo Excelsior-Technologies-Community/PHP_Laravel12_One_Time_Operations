@@ -1,59 +1,362 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PHP_Laravel12_One_Time_Operations
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Project Description
 
-## About Laravel
+PHP_Laravel12_One_Time_Operations is a Laravel 12 project that demonstrates how to perform one-time operations in a Laravel application.
+It allows developers to define operations like database seeding, data cleanup, or any custom task, which will run only once and never repeat automatically.
+This is useful for setup tasks, initial data seeding, or maintenance scripts that must not run multiple times.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. One-Time Operations: Define tasks that execute only once.
 
-## Learning Laravel
+2. Easy Operation Creation: Generate operations with Artisan command operations:make.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+3. Operations Tracking: Processed operations are tracked in the database, preventing duplicates.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. Sync and Async Execution: Operations can run synchronously or via queue.
 
-## Laravel Sponsors
+5. Tagging Support: Run operations selectively using tags.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+6. Customizable Directory & Table: You can configure the operations folder and database table.
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
 
-## Contributing
+## Benefits
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Avoid repeated execution of critical setup tasks.
 
-## Code of Conduct
+- Automate initial database seeding or cleanup scripts.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Integrate easily into CI/CD pipelines to ensure tasks run only once per deployment.
 
-## Security Vulnerabilities
+- Keep code organized and maintainable by separating one-time operations from migrations or controllers.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Technologies Used
+
+- PHP 8.1+
+
+- Laravel 12
+
+- MySQL / MariaDB
+
+- Composer for dependency management
+
+- TimoKoerber Laravel One-Time Operations Package for one-time tasks
+
+- Spatie Laravel Permission Package (optional, for roles example)
+
+
+## Prerequisites
+
+- PHP 8.1 or higher
+- Composer
+- MySQL or MariaDB
+- Laravel 12
+
+
+
+---
+
+
+
+## Installation Steps
+
+
+---
+
+
+## STEP 1: Create Laravel 12 Project
+
+### Open terminal / CMD and run:
+
+```
+composer create-project laravel/laravel PHP_Laravel12_One_Time_Operations "12.*"
+
+```
+
+### Go inside project:
+
+```
+cd PHP_Laravel12_One_Time_Operations
+
+```
+
+#### Explanation:
+
+Installs a fresh Laravel 12 project and navigates into the project folder for setup.
+
+
+
+
+
+## STEP 2: Database Setup 
+
+### Update database details:
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel12_one_time_operations
+DB_USERNAME=root
+DB_PASSWORD=
+
+```
+
+### Create database in MySQL / phpMyAdmin:
+
+```
+Database name: laravel12_one_time_operations
+
+```
+
+### Run migrations:
+
+```
+php artisan migrate
+
+```
+
+
+#### Explanation:
+
+Connects Laravel to MySQL and creates the required tables for your application.
+
+
+
+
+
+## STEP 3: Install One-Time Operations Package
+
+### Run:
+
+```
+composer require timokoerber/laravel-one-time-operations
+
+```
+
+
+#### Explanation:
+
+Installs the package that allows you to define operations that run only once.
+
+
+
+
+## STEP 4: Create Example Operation
+
+### Let’s create a first operation file:
+
+```
+php artisan operations:make AddAwesomeUser
+
+```
+
+### This will generate a file like:
+
+```
+operations/2026_03_02_000000_add_awesome_user.php
+
+```
+
+### Edit it as follows:
+
+```
+<?php
+
+use App\Models\User;
+use TimoKoerber\LaravelOneTimeOperations\OneTimeOperation;
+
+return new class extends OneTimeOperation
+{
+    // This runs synchronously
+    protected bool $async = false;
+
+    public function process(): void
+    {
+        User::create([
+            'name' => 'Awesome User',
+            'email' => 'awesome@example.com',
+            'password' => bcrypt('password123'),
+        ]);
+    }
+};
+
+```
+
+#### Explanation:
+
+This defines an operation that creates a new user. It will run once when executed.
+
+
+
+
+
+## STEP 5: Run Operations
+
+### Run:
+
+```
+php artisan operations:process
+
+```
+
+### Expected Output:
+
+```
+Processing operation: AddAwesomeUser
+
+ Successfully executed AddAwesomeUser
+
+```
+
+
+<img width="1448" height="207" alt="Screenshot 2026-03-02 162143" src="https://github.com/user-attachments/assets/f94bb3b6-3359-4038-baa3-0b1e6b6971e2" />
+
+
+
+
+### Now if you run it again:
+
+```
+php artisan operations:process
+
+```
+
+### You will see:
+
+```
+No pending operations to execute.
+
+```
+
+
+<img width="1450" height="123" alt="Screenshot 2026-03-02 162215" src="https://github.com/user-attachments/assets/47bff5de-046a-4c3c-a414-2ad56945d4aa" />
+
+
+
+#### Explanation:
+
+The first run executes the operation; subsequent runs skip it automatically.
+
+
+
+
+## STEP 6: Add More Operations
+
+### Example 1: Seed Roles
+
+```
+php artisan operations:make SeedRoles
+
+```
+
+### Edit:
+
+```
+<?php
+
+use Spatie\Permission\Models\Role;
+use TimoKoerber\LaravelOneTimeOperations\OneTimeOperation;
+
+return new class extends OneTimeOperation
+{
+    public function process(): void
+    {
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'editor']);
+    }
+};
+
+```
+
+#### Explanation:
+
+This operation seeds default roles into your database once.
+
+
+
+
+### Example 2: Clean Old Users
+
+```
+php artisan operations:make CleanupOldUsers
+
+```
+
+### Edit:
+
+```
+<?php
+
+use App\Models\User;
+use TimoKoerber\LaravelOneTimeOperations\OneTimeOperation;
+
+return new class extends OneTimeOperation
+{
+    public function process(): void
+    {
+        User::where('created_at', '<', now()->subYear())->delete();
+    }
+};
+
+```
+
+#### Explanation:
+
+This operation deletes users older than a year and runs only once.
+
+
+<img width="1411" height="256" alt="Screenshot 2026-03-02 162511" src="https://github.com/user-attachments/assets/b1e296af-782a-4504-97b1-d88326b81252" />
+
+
+### Run:
+
+```
+php artisan operations:process
+
+```
+
+### Console Output (like reference repo):
+
+```
+Processing operation: SeedRoles
+✓ Successfully executed SeedRoles
+Processing operation: CleanupOldUsers
+✓ Successfully executed CleanupOldUsers
+
+```
+
+
+<img width="1463" height="225" alt="Screenshot 2026-03-02 162329" src="https://github.com/user-attachments/assets/1d520d3f-25a7-4eea-85ee-8eacf17ff23e" />
+
+
+
+
+--- 
+
+# Project Folder Structure:
+
+```
+PHP_Laravel12_One_Time_Operations/
+├─ app/
+│  ├─ Models/
+│  │  └─ User.php
+├─ operations/
+│  ├─ 2026_03_02_000000_add_awesome_user.php
+│  ├─ 2026_03_02_000001_seed_roles.php
+│  └─ 2026_03_02_000002_cleanup_old_users.php
+├─ database/
+│  └─ migrations/
+├─ config/
+│  └─ one-time-operations.php
+└─ artisan
+
+```
+
+
+
