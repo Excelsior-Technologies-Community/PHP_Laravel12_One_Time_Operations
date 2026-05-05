@@ -74,10 +74,7 @@
 
         @forelse($operations as $op)
             <tr>
-                <!-- ✅ FIXED COLUMN -->
                 <td>{{ $op->operation }}</td>
-
-                <!-- ✅ STATUS BADGE -->
                 <td>
                     @if($op->ran_at)
                         <span class="badge completed">Completed</span>
@@ -85,8 +82,6 @@
                         <span class="badge pending">Pending</span>
                     @endif
                 </td>
-
-                <!-- ✅ FIXED COLUMN -->
                 <td>{{ $op->ran_at ?? '—' }}</td>
             </tr>
         @empty
