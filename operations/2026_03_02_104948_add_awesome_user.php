@@ -12,7 +12,7 @@ return new class extends OneTimeOperation {
     {
         try {
 
-            // ✅ MAIN OPERATION
+            // MAIN OPERATION
             User::firstOrCreate([
                 'email' => 'awesome@example.com'
             ], [
@@ -20,13 +20,13 @@ return new class extends OneTimeOperation {
                 'password' => bcrypt('password123'),
             ]);
 
-            // ✅ SAVE OPERATION STATUS (IMPORTANT 🔥)
+            // SAVE OPERATION STATUS 
             DB::table('one_time_operations')->updateOrInsert(
                 ['operation' => 'AddAwesomeUser'],
                 ['ran_at' => now()]
             );
 
-            // ✅ SUCCESS LOG
+            // SUCCESS LOG
             OperationLog::create([
                 'operation_name' => class_basename(static::class),
                 'status' => 'success',
@@ -36,7 +36,7 @@ return new class extends OneTimeOperation {
 
         } catch (\Exception $e) {
 
-            // ❌ FAILURE LOG
+            // FAILURE LOG
             OperationLog::create([
                 'operation_name' => class_basename(static::class),
                 'status' => 'failed',
