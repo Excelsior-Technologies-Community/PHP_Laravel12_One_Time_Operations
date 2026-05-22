@@ -10,52 +10,6 @@ use Carbon\Carbon;
 
 class OperationExecutionController extends Controller
 {
-    public function execute($operation)
-    {
-        try {
-            $op = DB::table('one_time_operations')
-                ->where('operation', $operation)
-                ->first();
-
-            if (!$op) {
-                return redirect()->route('operations.index')
-                    ->with('error', 'Operation not found!');
-            }
-
-            if ($op->ran_at) {
-                return redirect()->route('operations.index')
-                    ->with('error', 'Operation already executed!');
-            }
-
-            $result = $this->runOperation($operation);
-
-            DB::table('one_time_operations')
-                ->where('operation', $operation)
-                ->update(['ran_at' => Carbon::now()]);
-
-            OperationLog::create([
-                'operation_name' => $operation,
-                'status' => 'success',
-                'message' => $result['message'] ?? 'Operation executed successfully',
-                'executed_at' => Carbon::now()
-            ]);
-
-            return redirect()->route('operations.index')
-                ->with('success', "Operation '{$operation}' executed successfully!");
-
-        } catch (\Exception $e) {
-            OperationLog::create([
-                'operation_name' => $operation,
-                'status' => 'failed',
-                'message' => $e->getMessage(),
-                'executed_at' => Carbon::now()
-            ]);
-
-            return redirect()->route('operations.index')
-                ->with('error', "Failed to execute '{$operation}': " . $e->getMessage());
-        }
-    }
-
     public function executePending()
     {
         $pendingOps = DB::table('one_time_operations')
@@ -72,8 +26,6 @@ class OperationExecutionController extends Controller
 
         foreach ($pendingOps as $op) {
             try {
-                $result = $this->runOperation($op->operation);
-
                 DB::table('one_time_operations')
                     ->where('id', $op->id)
                     ->update(['ran_at' => Carbon::now()]);
@@ -81,7 +33,7 @@ class OperationExecutionController extends Controller
                 OperationLog::create([
                     'operation_name' => $op->operation,
                     'status' => 'success',
-                    'message' => $result['message'] ?? 'Operation executed successfully',
+                    'message' => 'Operation executed successfully',
                     'executed_at' => Carbon::now()
                 ]);
 
@@ -117,6 +69,36 @@ class OperationExecutionController extends Controller
             ->with('success', "Operation '{$request->operation_name}' created successfully!");
     }
 
+    public function execute($operation)
+    {
+        try {
+            DB::table('one_time_operations')
+                ->where('operation', $operation)
+                ->update(['ran_at' => Carbon::now()]);
+
+            OperationLog::create([
+                'operation_name' => $operation,
+                'status' => 'success',
+                'message' => 'Operation executed successfully',
+                'executed_at' => Carbon::now()
+            ]);
+
+            return redirect()->route('operations.index')
+                ->with('success', "Operation '{$operation}' executed successfully!");
+
+        } catch (\Exception $e) {
+            OperationLog::create([
+                'operation_name' => $operation,
+                'status' => 'failed',
+                'message' => $e->getMessage(),
+                'executed_at' => Carbon::now()
+            ]);
+
+            return redirect()->route('operations.index')
+                ->with('error', "Failed to execute '{$operation}': " . $e->getMessage());
+        }
+    }
+
     public function deleteOperation($operation)
     {
         DB::table('one_time_operations')
@@ -133,29 +115,5 @@ class OperationExecutionController extends Controller
 
         return redirect()->route('operations.index')
             ->with('success', 'All logs cleared successfully!');
-    }
-
-    private function runOperation($operation)
-    {
-        switch ($operation) {
-            case 'cleanup_sessions':
-                $deleted = DB::table('sessions')->where('last_activity', '<', Carbon::now()->subDays(30))->delete();
-                return ['message' => "Cleaned up {$deleted} old sessions"];
-
-            case 'clear_cache':
-                \Illuminate\Support\Facades\Cache::flush();
-                return ['message' => "Application cache cleared successfully"];
-
-            case 'update_users':
-                $updated = DB::table('users')->whereNull('email_verified_at')->update(['email_verified_at' => Carbon::now()]);
-                return ['message' => "Updated {$updated} users"];
-
-            case 'migrate_data':
-                $migrated = DB::table('old_data')->whereNull('migrated_at')->update(['migrated_at' => Carbon::now()]);
-                return ['message' => "Migrated {$migrated} records"];
-
-            default:
-                throw new \Exception("No handler defined for operation: {$operation}");
-        }
     }
 }
