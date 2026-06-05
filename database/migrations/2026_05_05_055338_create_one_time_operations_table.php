@@ -10,8 +10,9 @@ return new class extends Migration
     {
         Schema::create('one_time_operations', function (Blueprint $table) {
             $table->id();
-            $table->string('operation');   // ✅ IMPORTANT (correct column)
-            $table->timestamp('ran_at')->nullable(); // ✅ correct column
+            $table->string('operation');
+            $table->timestamp('ran_at')->nullable();
+            $table->timestamps(); // Added timestamps for best practice
         });
     }
 
