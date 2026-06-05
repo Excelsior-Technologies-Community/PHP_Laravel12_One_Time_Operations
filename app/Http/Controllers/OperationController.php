@@ -1,5 +1,4 @@
 <?php
-// C:\xampp\htdocs\PHP_Laravel12_One_Time_Operations\app\Http\Controllers\OperationController.php
 
 namespace App\Http\Controllers;
 
@@ -15,12 +14,14 @@ class OperationController extends Controller
         $stats = [
             'total' => $operations->count(),
             'completed' => $operations->whereNotNull('ran_at')->count(),
-            'pending' => $operations->whereNull('ran_at')->count(),
+        
+            'pending' => $operations->whereNull('ran_at')->count(), 
+            'pending_execution' => $operations->whereNull('ran_at')->count(),
+            'pending_approval' => $operations->where('is_approved', false)->count(),
             'success_rate' => $operations->count() > 0 
                 ? round(($operations->whereNotNull('ran_at')->count() / $operations->count()) * 100, 2)
                 : 0
         ];
-
         $logs = OperationLog::latest()->paginate(10);
 
         return view('operations.index', compact('operations', 'logs', 'stats'));

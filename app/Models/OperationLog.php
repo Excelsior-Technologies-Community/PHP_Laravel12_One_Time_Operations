@@ -1,5 +1,4 @@
 <?php
-// C:\xampp\htdocs\PHP_Laravel12_One_Time_Operations\app\Models\OperationLog.php
 
 namespace App\Models;
 
@@ -10,13 +9,20 @@ class OperationLog extends Model
     protected $table = 'operation_logs';
 
     protected $fillable = [
+        'operation_id',
         'operation_name',
         'status',
         'message',
+        'output',
         'executed_at'
     ];
 
     protected $casts = [
         'executed_at' => 'datetime',
     ];
+
+    public function operation()
+    {
+        return $this->belongsTo(OneTimeOperation::class, 'operation_id');
+    }
 }

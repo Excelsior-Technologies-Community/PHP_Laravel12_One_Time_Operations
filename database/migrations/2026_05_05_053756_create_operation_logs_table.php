@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('operation_logs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('operation_id')->nullable(); // Added for linking
             $table->string('operation_name');
             $table->enum('status', ['success', 'failed']);
             $table->text('message')->nullable();
